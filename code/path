@@ -1,0 +1,3 @@
+INPUT_FOLDER          = r"C:\Users\Login Realty\Documents\Watermark_Automation\input images"
+OUTPUT_FOLDER         = r"C:\Users\Login Realty\Documents\Watermark_Automation\Grade A Final"
+WATERMARK_IMAGE       = r"C:\Users\Login Realty\Documents\Watermark_Automation\code\Watermark_image.png"

@@ -1,0 +1,28 @@
+# Python cache / environment
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+venv/
+env/
+ENV/
+
+# OS / editor files
+.DS_Store
+Thumbs.db
+desktop.ini
+.vscode/
+.idea/
+
+# Do not commit bulk input property images
+input images/*
+!input images/.gitkeep
+
+# Do not commit final watermarked images or generated reports
+Grade A Final/*
+!Grade A Final/.gitkeep
+
+# Optional local logs / temporary files
+*.log
+*.tmp
+*.bak
