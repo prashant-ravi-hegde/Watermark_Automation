@@ -26,3 +26,21 @@ Grade A Final/*
 *.log
 *.tmp
 *.bak
+
+# Ignore image/data files in working folders
+Input Images/*
+Output Images/*
+All Raw/*
+All Processed/*
+Failed Images/*
+*.csv
+
+# Keep folder placeholders
+!Input Images/.gitkeep
+!Output Images/.gitkeep
+!All Raw/.gitkeep
+!All Processed/.gitkeep
+!Failed Images/.gitkeep
+
+# Google Drive temp
+.tmp.driveupload/

@@ -2,141 +2,109 @@
 
 Local Python automation for bulk watermarking real estate listing images.
 
-This project is designed for property listing platform images. The image filenames are property IDs used in the database, so filename preservation is critical.
+Image filenames are property IDs used in the database. **Filename preservation is critical.**
 
-## Important Rule
+## Rules
 
-The script must preserve every image filename exactly.
+- Input filename base = Output filename base
+- All output is saved as JPG
+- No prefix, no suffix, no serial number added
 
-```text
-Input filename = Output filename
 ```
-
-Example:
-
-```text
-input images/1075.avif
-Grade A Final/1075.avif
+12345.jpg   →  12345.jpg
+12345.png   →  12345.jpg
+12345.webp  →  12345.jpg
 ```
-
-No prefix, no suffix, no serial number, and no extension change.
 
 ## Folder Structure
 
-```text
+```
 Watermark_Automation/
-│
-├── code/
+├── Code/
 │   ├── watermark_script.py
-│   └── Watermark_image.png
-│
-├── input images/
-│   └── .gitkeep
-│
-├── Grade A Final/
-│   └── .gitkeep
-│
+│   ├── Watermark_image.png
+│   └── .env
+├── Input Images/
+├── Output Images/
+├── All Raw/
+├── All Processed/
+├── Failed Images/
 ├── requirements.txt
-├── README.md
-└── .gitignore
+└── README.md
 ```
 
-## What Gets Committed to GitHub
+## Flow
 
-Commit:
-
-```text
-code/watermark_script.py
-code/Watermark_image.png
-requirements.txt
-README.md
-.gitignore
-input images/.gitkeep
-Grade A Final/.gitkeep
+```
+Input Images/   ←  drop images here (or Google Drive syncs them in)
+      ↓
+  Script runs
+      ↓
+Output Images/     ←  watermarked JPGs
+All Raw/           ←  originals moved here after success
+All Processed/     ←  copy of watermarked output kept here
+Failed Images/     ←  corrupt, unsupported, or collision files
 ```
 
-Do not commit bulk property images or final watermarked images.
+## Supported Formats
 
-The `.gitignore` file is configured to ignore:
-
-```text
-input images/*
-Grade A Final/*
-```
-
-but still keep the folders using `.gitkeep`.
+JPG, JPEG, PNG, WEBP — all converted to JPG output.
 
 ## Setup
 
-Open PowerShell or Command Prompt inside the project folder:
-
 ```powershell
-cd "C:\Users\Login Realty\Documents\Watermark_Automation"
-```
-
-Install requirements:
-
-```powershell
+cd "C:\Users\Login Realty\Google Drive\Watermark_Automation"
 pip install -r requirements.txt
 ```
 
+Copy `Code/.env.sample` to `Code/.env` and adjust paths if needed.
+
 ## Run
 
-The script is inside the `code` folder.
-
-Run it like this:
-
 ```powershell
-cd code
+cd Code
+
+# Process all files once and exit
 python watermark_script.py
+
+# Keep running, auto-pick up new files every 10 seconds
+python watermark_script.py --watch
 ```
 
-Or from the project root:
+## Configuration
 
-```powershell
-python .\code\watermark_script.py
-```
+All settings live in `Code/.env`. Key options:
 
-## Input
-
-Put original property images inside:
-
-```text
-input images/
-```
-
-Supported image formats depend on the script configuration, but commonly include:
-
-```text
-.jpg, .jpeg, .png, .webp, .bmp, .tiff, .tif, .avif
-```
-
-## Output
-
-Watermarked images are saved inside:
-
-```text
-Grade A Final/
-```
-
-The output image keeps the exact same filename as the input image.
-
-## Report
-
-The script creates a processing report:
-
-```text
-Grade A Final/watermark_processing_report.csv
-```
-
-The report records successful, skipped, and failed files.
-
-If the report file is open in Excel, close it before running the script again. Otherwise, Windows may show a permission error.
+| Setting | Default | Description |
+|---|---|---|
+| `WATERMARK_TEXT` | `Login Realty` | Text rendered on images |
+| `WATERMARK_POSITION` | `lower-center` | Position on image |
+| `WATERMARK_OPACITY` | `0.40` | 0.0 = invisible, 1.0 = solid |
+| `WATERMARK_SCALE_PERCENT` | `18` | Watermark width as % of image width |
+| `OUTPUT_QUALITY` | `92` | JPG quality (1–95) |
+| `WATCH_INTERVAL_SECS` | `10` | Polling interval in watcher mode |
 
 ## Notes
 
 - Do not rename property image files manually.
-- Do not change file extensions manually.
-- Keep `OVERWRITE_EXISTING = False` if you want the script to skip already processed images.
-- If only one missing image needs processing, keep all existing output images in `Grade A Final` and rerun the script. Existing files will be skipped.
-- AVIF support requires `pillow-avif-plugin`, which is included in `requirements.txt`.
+- If the processing report CSV is open in Excel, close it before running the script.
+- System files like `desktop.ini`, `Thumbs.db`, `.DS_Store`, and `.gitkeep` are automatically ignored.
+- Double extensions like `170.jpg.jpeg` are handled correctly → output is `170.jpg`.
+
+## What Gets Committed to GitHub
+
+```
+Code/watermark_script.py
+Code/Watermark_image.png
+Code/.env.sample
+requirements.txt
+README.md
+.gitignore
+Input Images/.gitkeep
+Output Images/.gitkeep
+All Raw/.gitkeep
+All Processed/.gitkeep
+Failed Images/.gitkeep
+```
+
+Do not commit bulk property images or processed output.

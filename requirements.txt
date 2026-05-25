@@ -1,2 +1,5 @@
 Pillow>=10.0.0
 pillow-avif-plugin>=1.4.0
+
+# Optional: install for HEIC/HEIF support (iPhone photos)
+# pip install pillow-heif
